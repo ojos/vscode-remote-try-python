@@ -25,7 +25,7 @@ services:
     build:
       context:    ../app
       dockerfile: Dockerfile
-    image:          vscode-remote/app
+    image:          vscode-remote-for-python/app
     container_name: app
     command:        gunicorn core.wsgi:application -c gunicorn.py
     environment:

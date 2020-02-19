@@ -4,7 +4,7 @@ services:
     build:
       context:    .
       dockerfile: Dockerfile
-    image: vscode-remote/dev
+    image: vscode-remote-for-python/dev
     container_name: dev
     environment:
       AWS_SHARED_CREDENTIALS_FILE: /workspaces/.aws/credentials
