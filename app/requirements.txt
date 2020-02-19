@@ -1,0 +1,14 @@
+boto3
+pytz
+requests
+git+https://github.com/ojos/python-library.git
+meinheld
+gunicorn
+Django
+mysqlclient
+redis
+django-redis
+django-extensions
+djangorestframework
+Werkzeug
+

@@ -1,0 +1,66 @@
+version: "3"
+services:
+  db:
+    image:          ojos/mysql:aurora2
+    container_name: db
+    user:           "1000:1000"
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_USER:          sample
+      MYSQL_PASSWORD:      sample
+      MYSQL_DATABASE:      sample 
+      TZ:                  Asia/Tokyo
+    ports:
+      - 3306:3306
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "512m"
+        max-file: "3"
+    volumes:
+      - ../etc/mysql/mysql.conf.d:/etc/mysql/mysql.conf.d
+      - ../tmp/db:/var/lib/mysql
+      - ../tmp/log/db:/var/log/mysql
+  app:
+    build:
+      context:    ../app
+      dockerfile: Dockerfile
+    image:          vscode-remote/app
+    container_name: app
+    command:        gunicorn core.wsgi:application -c gunicorn.py
+    environment:
+      APP_ENV:        local
+      MYSQL_HOST:     db
+      MYSQL_USER:     sample
+      MYSQL_PASSWORD: sample
+      MYSQL_DATABASE: sample
+      STATIC_URL:     /
+    expose:
+      - 8000
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "512m"
+        max-file: "3"
+    volumes:
+      - ../app:/var/app
+      - ../.aws:/root/.aws
+      - ../tmp/log/app:/var/log/app
+    depends_on:
+      - db
+  reverseproxy:
+    image:          nginx:mainline-alpine
+    container_name: reverseproxy
+    ports:
+      - 80:80
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "512m"
+        max-file: "3"
+    volumes:
+      - ../etc/nginx/conf.d:/etc/nginx/conf.d
+      - ../app/static:/usr/share/nginx/html
+      - ../tmp/log/reverseproxy:/var/log/reverseproxy
+    depends_on:
+      - app

@@ -1,0 +1,25 @@
+version: '3'
+services:
+  dev:
+    build:
+      context:    .
+      dockerfile: Dockerfile
+    image: vscode-remote/dev
+    container_name: dev
+    environment:
+      AWS_SHARED_CREDENTIALS_FILE: /workspaces/.aws/credentials
+      AWS_CONFIG_FILE:             /workspaces/.aws/config
+      APP_ENV:                     local-dev
+      MYSQL_HOST:                  db
+      MYSQL_USER:                  sample
+      MYSQL_PASSWORD:              sample
+      MYSQL_DATABASE:              sample
+      STATIC_URL:                  /static/
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+      - ~/.ssh:/home/vscode/.ssh
+      - ~/.gitconfig:/home/vscode/.gitconfig
+      - ../:/workspaces
+    ports:
+      - 8000:8000
+    command: sleep infinity 
