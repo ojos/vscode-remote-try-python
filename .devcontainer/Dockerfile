@@ -59,13 +59,13 @@ RUN curl "https://releases.hashicorp.com/terraform/0.12.20/terraform_0.12.20_lin
     && unzip terraform.zip \
     && mv terraform /usr/local/bin \
     && rm -rf terraform.zip \
-    && echo "alias tf='terraform'" >> /home/vscode/.bash_aliases
+    && echo "alias tf='terraform'" >> /home/$USERNAME/.bash_aliases
 
 # Install docker
 RUN curl -fsSL "https://get.docker.com" -o "get-docker.sh" \
     && sh get-docker.sh \
     && rm get-docker.sh \
-    && echo "alias docker='sudo docker'" >> /home/vscode/.bash_aliases
+    && echo "alias docker='sudo docker'" >> /home/$USERNAME/.bash_aliases
 
 # Switch back to dialog for any ad-hoc use of apt-get
 ENV DEBIAN_FRONTEND=dialog
